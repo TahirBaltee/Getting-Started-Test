@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_HUB_USER: tahirbaltee  # Replace with your Docker Hub username
+      DOCKER_HUB_USER: tahirbaltee  # Your Docker Hub username
       IMAGE_NAME: my-app-image
       IMAGE_TAG: latest
       MANAGER_NODE_IP: ${{ secrets.MANAGER_NODE_IP }}
@@ -29,8 +29,8 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      - name: Debug Docker Image Name
-        run: echo "Deploying Image $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG"
+      - name: 🔍 Debug Docker Image Name
+        run: echo "Deploying Image: $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG"
 
       - name: Build and Push Docker Image
         run: |
@@ -44,5 +44,11 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo "🔍 Pulling latest image..."
             docker pull $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG
+
+            echo "🔍 Removing old stack (if exists)..."
+            docker stack rm my_app || true
+
+            echo "🔍 Deploying updated stack..."
             docker stack deploy -c ~/getting-started-app/bb-stack.yaml my_app
