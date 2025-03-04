@@ -2,10 +2,10 @@ version: "3.7"
 
 services:
   bb-app:
-    image: tahirbaltee/my-app-image:latest  # Full Docker Hub image reference
+    image: tahirbaltee/my-app-image:latest  # ✅ Full Docker Hub image reference
     deploy:
       mode: replicated
-      replicas: 3  # Ensures 3 replicas
+      replicas: 3  # ✅ Ensures 3 replicas
       restart_policy:
         condition: on-failure
       update_config:
@@ -13,12 +13,12 @@ services:
         delay: 10s
       placement:
         constraints:
-          - "node.platform.os == linux"  # Ensure it runs only on Linux nodes
+          - "node.platform.os == linux"  # ✅ Ensures it runs only on Linux nodes
     ports:
-      - "8000:3000"  # Ensures external access
+      - "8000:3000"  # ✅ Ensures external access
     networks:
-      - bb-network  # Attach to Swarm overlay network
+      - my_app_bb-network  # ✅ Corrected network name for consistency
 
 networks:
-  bb-network:
-    driver: overlay  # Required for Docker Swarm
+  my_app_bb-network:  # ✅ Matches your deployment network
+    driver: overlay  # ✅ Required for Docker Swarm
