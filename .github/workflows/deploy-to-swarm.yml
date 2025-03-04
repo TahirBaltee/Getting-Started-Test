@@ -59,7 +59,9 @@ jobs:
             docker stack rm my_app || true
 
             echo "🔍 Ensuring network exists..."
-            docker network create --driver overlay my_app_bb-network || true
+            if ! docker network inspect bb-network > /dev/null 2>&1; then
+              docker network create --driver overlay bb-network
+            fi
 
             echo "🔍 Deploying updated stack..."
             docker stack deploy -c ~/getting-started-app/bb-stack.yaml my_app
