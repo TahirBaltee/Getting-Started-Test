@@ -13,7 +13,7 @@ jobs:
       DOCKER_HUB_USER: tahirbaltee  # Replace with your Docker Hub username
       IMAGE_NAME: getting-started
       IMAGE_TAG: latest
-      MANAGER_NODE_IP: YOUR_MANAGER_NODE_PUBLIC_IP
+      MANAGER_NODE_IP: MANAGER_NODE_IP
       SSH_USER: tahirsalingi
 
     steps:
