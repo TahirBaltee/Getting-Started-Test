@@ -29,8 +29,8 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      - name: 🔍 1️⃣ Add Debugging Step
-        run: echo "Deploying Image: ${{ env.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
+      - name: Debug Docker Image Name
+        run: echo "Deploying Image: $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG"
 
       - name: Build and Push Docker Image
         run: |
