@@ -11,7 +11,7 @@ jobs:
 
     env:
       DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USERNAME }}  # Replace with your Docker Hub username
-      IMAGE_NAME: getting-started
+      IMAGE_NAME: my-app-image
       IMAGE_TAG: latest
       MANAGER_NODE_IP: ${{ secrets.MANAGER_NODE_IP }}
       SSH_USER: ${{ secrets.SSH_USER }}
