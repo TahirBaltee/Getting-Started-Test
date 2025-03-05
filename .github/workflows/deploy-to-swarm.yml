@@ -30,12 +30,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Debug Docker Image Name
-        run: |
-          echo "Deploying Image: $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG"
-          if [[ -z "$DOCKER_HUB_USER" || -z "$IMAGE_NAME" || -z "$IMAGE_TAG" ]]; then
-            echo "❌ ERROR: One or more required environment variables are empty!"
-            exit 1
-          fi
+        run: echo "Deploying Image $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG"
 
       - name: Build and Push Docker Image
         run: |
@@ -49,16 +44,5 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "🔍 Pulling latest image..."
             docker pull $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG
-
-            echo "🔍 Removing old stack (if exists)..."
-            docker stack rm my_app || true
-
-            echo "🔍 Ensuring network exists..."
-            if ! docker network inspect bb-network > /dev/null 2>&1; then
-              docker network create --driver overlay bb-network
-            fi
-
-            echo "🔍 Deploying updated stack..."
             docker stack deploy -c ~/getting-started-app/bb-stack.yaml my_app
