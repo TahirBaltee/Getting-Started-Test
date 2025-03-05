@@ -1,7 +1,15 @@
 version: "3.7"
 
+networks:
+  bb-network:
+    driver: overlay
+
 services:
   bb-app:
     image: tahirbaltee/my-app-image:latest  # Ensure this matches the workflow
+    deploy:
+      replicas: 3
     ports:
       - "8000:3000"
+    networks:
+      - bb-network

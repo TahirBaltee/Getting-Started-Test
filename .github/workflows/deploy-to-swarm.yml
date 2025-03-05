@@ -55,5 +55,10 @@ jobs:
             echo "🔍 Removing old stack (if exists)..."
             docker stack rm my_app || true
 
+            echo "🔍 Ensuring network exists..."
+            if ! docker network inspect bb-network > /dev/null 2>&1; then
+              docker network create --driver overlay bb-network
+            fi
+
             echo "🔍 Deploying updated stack..."
             docker stack deploy -c ~/getting-started-app/bb-stack.yaml my_app
