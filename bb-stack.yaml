@@ -2,6 +2,6 @@ version: "3.7"
 
 services:
   bb-app:
-    image: tahirbaltee/my-app-image:latest
+    image: tahirbaltee/getting-started:latest
     ports:
       - "8000:3000"

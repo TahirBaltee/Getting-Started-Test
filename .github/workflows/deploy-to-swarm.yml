@@ -11,7 +11,7 @@ jobs:
 
     env:
       DOCKER_HUB_USER: tahirbaltee  # Replace with your Docker Hub username
-      IMAGE_NAME: my-app-image
+      IMAGE_NAME: getting-started
       IMAGE_TAG: latest
       MANAGER_NODE_IP: ${{ secrets.MANAGER_NODE_IP }}
       SSH_USER: ${{ secrets.SSH_USER }}
@@ -34,8 +34,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t tahirbaltee/my-app-image:latest .
-          docker push tahirbaltee/my-app-image:latest
+          docker build -t tahirbaltee/getting-started:latest .
+          docker push tahirbaltee/getting-started:latest
 
       - name: Deploy to Docker Swarm
         uses: appleboy/ssh-action@v0.1.7
