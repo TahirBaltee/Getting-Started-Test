@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      #DOCKER_HUB_USER: tahirbaltee  # Replace with your Docker Hub username
-      #IMAGE_NAME: tahirbaltee/my-app-image:latest
-      #IMAGE_TAG: latest
+      DOCKER_HUB_USER: tahirbaltee  # Replace with your Docker Hub username
+      IMAGE_NAME: my-app-image
+      IMAGE_TAG: latest
       MANAGER_NODE_IP: ${{ secrets.MANAGER_NODE_IP }}
       SSH_USER: ${{ secrets.SSH_USER }}
 
@@ -30,12 +30,17 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Debug Docker Image Name
-        run: echo "Deploying Image $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG"
+        run: |
+          echo "Deploying Image: $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG"
+          if [[ -z "$DOCKER_HUB_USER" || -z "$IMAGE_NAME" || -z "$IMAGE_TAG" ]]; then
+            echo "❌ ERROR: One or more required environment variables are empty!"
+            exit 1
+          fi
 
       - name: Build and Push Docker Image
         run: |
           docker build -t $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG .
-          docker push tahirbaltee/my-app-image:latest
+          docker push $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG
 
       - name: Deploy to Docker Swarm
         uses: appleboy/ssh-action@v0.1.7
@@ -44,5 +49,11 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull tahirbaltee/my-app-image:latest
+            echo "🔍 Pulling latest image..."
+            docker pull $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG
+
+            echo "🔍 Removing old stack (if exists)..."
+            docker stack rm my_app || true
+
+            echo "🔍 Deploying updated stack..."
             docker stack deploy -c ~/getting-started-app/bb-stack.yaml my_app
