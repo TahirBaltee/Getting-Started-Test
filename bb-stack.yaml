@@ -1,24 +1,7 @@
 version: "3.7"
 
-networks:
-  bb-network:
-    driver: overlay  # Ensure the network is created before services start
-
 services:
   bb-app:
     image: tahirbaltee/my-app-image:latest
-    deploy:
-      mode: replicated
-      replicas: 3
-      restart_policy:
-        condition: on-failure
-      update_config:
-        parallelism: 1
-        delay: 10s
-      placement:
-        constraints:
-          - "node.platform.os == linux"
     ports:
       - "8000:3000"
-    networks:
-      - bb-network
