@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_HUB_USER: tahirbaltee  # Replace with your Docker Hub username
+      DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USERNAME }}  # Replace with your Docker Hub username
       IMAGE_NAME: getting-started
       IMAGE_TAG: latest
       MANAGER_NODE_IP: ${{ secrets.MANAGER_NODE_IP }}
@@ -28,9 +28,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-
-      - name: Debug Docker Image Name
-        run: echo "Deploying Image $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG"
 
       - name: Build and Push Docker Image
         run: |
