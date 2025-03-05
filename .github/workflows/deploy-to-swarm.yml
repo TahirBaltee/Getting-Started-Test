@@ -34,8 +34,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG .
-          docker push $DOCKER_HUB_USER/$IMAGE_NAME:$IMAGE_TAG
+          docker build -t tahirbaltee/my-app-image:latest .
+          docker push tahirbaltee/my-app-image:latest
 
       - name: Deploy to Docker Swarm
         uses: appleboy/ssh-action@v0.1.7
