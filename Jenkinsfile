@@ -11,14 +11,14 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-                git credentialsId: 'github-credentials', url: 'https://github.com/TahirBaltee/Getting-Started-Test.git'
+                git branch: 'main', url: 'https://github.com/TahirBaltee/Getting-Started-Test.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${DOCKER_HUB_REPO}/todo-frontend:latest", ".")
+                    dockerImage = docker.build("${DOCKER_HUB_REPO}/getting-started:latest", ".")
                 }
             }
         }
