@@ -7,12 +7,12 @@ pipeline {
         KUBECONFIG = '/var/lib/jenkins/.kube/config'
     }
 
-    stages {
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/yourusername/k8s-todo-app.git'
-            }
-        }
+    stage('Clone Repository') {
+    steps {
+        git credentialsId: 'github-credentials', url: 'https://github.com/TahirBaltee/Getting-Started-Test.git'
+    }
+}
+
 
         stage('Build Docker Image') {
             steps {
