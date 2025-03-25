@@ -36,6 +36,8 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
+                    // Explicitly set the KUBECONFIG environment variable
+                    withEnv(['KUBECONFIG=/home/tahirsalingi/.kube/config']) {
                     sh 'kubectl apply -f deployment.yaml'
                     sh 'kubectl apply -f service.yaml'
                 }
