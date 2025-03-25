@@ -7,12 +7,13 @@ pipeline {
         KUBECONFIG = '/var/lib/jenkins/.kube/config'
     }
 
-    stage('Clone Repository') {
-    steps {
-        git credentialsId: 'github-credentials', url: 'https://github.com/TahirBaltee/Getting-Started-Test.git'
-    }
-}
+    stages {  // <-- Added "stages" block to wrap all the stage definitions
 
+        stage('Clone Repository') {
+            steps {
+                git credentialsId: 'github-credentials', url: 'https://github.com/TahirBaltee/Getting-Started-Test.git'
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -48,5 +49,6 @@ pipeline {
                 }
             }
         }
-    }
+
+    } // <-- Properly closed the "stages" block
 }
