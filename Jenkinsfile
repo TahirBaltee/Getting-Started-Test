@@ -35,19 +35,22 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                script {
-                    sh 'export KUBECONFIG=/home/tahirsalingi/.kube/config'
-                    sh 'kubectl apply -f deployment.yaml'
-                    sh 'kubectl apply -f service.yaml'
+                // Using the Kubernetes token from Jenkins credentials
+                withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
+                    // Export the KUBECONFIG and apply the deployments
+                sh 'export KUBECONFIG=/home/tahirsalingi/.kube/config'
+                sh 'kubectl apply -f deployment.yaml --token=$KUBE_TOKEN'
+                sh 'kubectl apply -f service.yaml --token=$KUBE_TOKEN'
+                    
                 }
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                script {
-                    sh 'kubectl get pods'
-                    sh 'kubectl get services'
+                withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
+                    sh 'kubectl get pods --token=$KUBE_TOKEN'
+                    sh 'kubectl get services --token=$KUBE_TOKEN'
                 }
             }
         }
