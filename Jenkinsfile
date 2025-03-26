@@ -40,6 +40,7 @@ pipeline {
                     // Export the KUBECONFIG and apply the deployments
                 sh 'export KUBECONFIG=/home/tahirsalingi/.kube/config'
                 sh 'ssh devopsusr@172.28.3.96 kubectl apply -f /home/tahirsalingi/deployment.yaml --kubeconfig=$KUBECONFIG'                    
+                
                 }
             }
         }
