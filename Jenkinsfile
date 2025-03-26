@@ -39,21 +39,19 @@ pipeline {
                 withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
                     // Export the KUBECONFIG and apply the deployments
                 sh 'export KUBECONFIG=/home/tahirsalingi/.kube/config'
-                sh 'kubectl apply -f deployment.yaml --token=$KUBE_TOKEN'
-                sh 'kubectl apply -f service.yaml --token=$KUBE_TOKEN'
-                    
+                sh 'ssh devopsusr@172.28.3.96 kubectl apply -f /home/tahirsalingi/deployment.yaml --kubeconfig=$KUBECONFIG'                    
                 }
             }
         }
 
-        stage('Verify Deployment') {
-            steps {
-                withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
-                    sh 'kubectl get pods --token=$KUBE_TOKEN'
-                    sh 'kubectl get services --token=$KUBE_TOKEN'
-                }
-            }
-        }
+        // stage('Verify Deployment') {
+        //     steps {
+        //         withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
+        //             sh 'kubectl get pods'
+        //             sh 'kubectl get services'
+        //         }
+        //     }
+        // }
 
     } // <-- Properly closed the "stages" block
 }
