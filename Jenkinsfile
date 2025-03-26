@@ -7,7 +7,7 @@ pipeline {
         KUBECONFIG = '/var/lib/jenkins/.kube/config'
     }
 
-    stages {  // <-- Added "stages" block to wrap all the stage definitions
+    stages {
 
         stage('Clone Repository') {
             steps {
@@ -35,24 +35,24 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                // Using the Kubernetes token from Jenkins credentials
                 withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
-                    // Export the KUBECONFIG and apply the deployments
-                sh 'export KUBECONFIG=/home/tahirsalingi/.kube/config'
-                sh 'ssh devopsusr@172.28.3.96 kubectl apply -f /home/tahirsalingi/deployment.yaml --kubeconfig=$KUBECONFIG'                    
-                
+                    script {
+                        sh 'export KUBECONFIG=/home/tahirsalingi/.kube/config'
+                        sh 'kubectl apply -f deployment.yaml'
+                        sh 'kubectl apply -f service.yaml'
+                    }
                 }
             }
         }
 
-        // stage('Verify Deployment') {
-        //     steps {
-        //         withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
-        //             sh 'kubectl get pods'
-        //             sh 'kubectl get services'
-        //         }
-        //     }
-        // }
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    sh 'kubectl get pods'
+                    sh 'kubectl get services'
+                }
+            }
+        }
 
-    } // <-- Properly closed the "stages" block
-}
+    } // Close stages block
+} // Close pipeline block
