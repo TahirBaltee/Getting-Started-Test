@@ -37,9 +37,9 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
                     script {
-                        sh 'export KUBECONFIG=/home/tahirsalingi/.kube/config'
-                        sh 'kubectl apply -f deployment.yaml'
-                        sh 'kubectl apply -f service.yaml'
+                        bat 'export KUBECONFIG=/home/tahirsalingi/.kube/config'
+                        bat 'kubectl apply -f deployment.yaml'
+                        bat 'kubectl apply -f service.yaml'
                     }
                 }
             }
@@ -48,8 +48,8 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 script {
-                    sh 'kubectl get pods'
-                    sh 'kubectl get services'
+                    bat 'kubectl get pods'
+                    bat 'kubectl get services'
                 }
             }
         }
