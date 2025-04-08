@@ -41,8 +41,8 @@ pipeline {
                         kubectl config set-credentials jenkins-user --token=%KUBE_TOKEN%
                         kubectl config set-context jenkins-context --cluster=k8s-cluster --user=jenkins-user
                         kubectl config use-context jenkins-context
-                        kubectl apply -f deployment.yaml
-                        kubectl apply -f service.yaml
+                        bat 'kubectl apply -f deployment.yaml --validate=false'
+                        bat 'kubectl apply -f service.yaml --validate=false'
                         """
                     }
                 }
