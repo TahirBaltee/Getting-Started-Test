@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials'
         DOCKER_HUB_REPO = 'tahirbaltee'
-        KUBECONFIG = '/var/lib/jenkins/.kube/config'
     }
 
     stages {
@@ -37,8 +36,14 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
                     script {
-                        bat 'kubectl --token=%KUBE_TOKEN% --server=https://10.160.0.4:6443 --insecure-skip-tls-verify apply -f deployment.yaml'
-                        bat 'kubectl --token=%KUBE_TOKEN% --server=https://10.160.0.4:6443 --insecure-skip-tls-verify apply -f service.yaml'
+                        bat """
+                        kubectl config set-cluster k8s-cluster --server=https://10.160.0.4:6443 --insecure-skip-tls-verify=true
+                        kubectl config set-credentials jenkins-user --token=%KUBE_TOKEN%
+                        kubectl config set-context jenkins-context --cluster=k8s-cluster --user=jenkins-user
+                        kubectl config use-context jenkins-context
+                        kubectl apply -f deployment.yaml
+                        kubectl apply -f service.yaml
+                        """
                     }
                 }
             }
@@ -47,11 +52,13 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 script {
-                    bat 'kubectl --token=%KUBE_TOKEN% --server=https://10.160.0.4:6443 --insecure-skip-tls-verify get pods'
-                    bat 'kubectl --token=%KUBE_TOKEN% --server=https://10.160.0.4:6443 --insecure-skip-tls-verify get services'
+                    bat """
+                    kubectl get pods
+                    kubectl get services
+                    """
                 }
             }
         }
 
-    } // Close stages block
-} // Close pipeline block
+    }
+}
