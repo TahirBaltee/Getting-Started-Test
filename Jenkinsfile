@@ -37,9 +37,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
                     script {
-                        bat 'export KUBECONFIG=/home/tahirsalingi/.kube/config'
-                        bat 'kubectl apply -f deployment.yaml'
-                        bat 'kubectl apply -f service.yaml'
+                        bat 'kubectl --token=%KUBE_TOKEN% --server=https://10.160.0.4:6443 --insecure-skip-tls-verify apply -f deployment.yaml'
+                        bat 'kubectl --token=%KUBE_TOKEN% --server=https://10.160.0.4:6443 --insecure-skip-tls-verify apply -f service.yaml'
                     }
                 }
             }
@@ -48,8 +47,8 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 script {
-                    bat 'kubectl get pods'
-                    bat 'kubectl get services'
+                    bat 'kubectl --token=%KUBE_TOKEN% --server=https://10.160.0.4:6443 --insecure-skip-tls-verify get pods'
+                    bat 'kubectl --token=%KUBE_TOKEN% --server=https://10.160.0.4:6443 --insecure-skip-tls-verify get services'
                 }
             }
         }
