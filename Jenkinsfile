@@ -37,7 +37,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'kubernetes-token', variable: 'KUBE_TOKEN')]) {
                     script {
                         bat """
-                        kubectl config set-cluster k8s-cluster --server=https://10.160.0.4:6443 --insecure-skip-tls-verify=true
+                        kubectl config set-cluster k8s-cluster --server=https://34.47.186.147:6443 --insecure-skip-tls-verify=true
                         kubectl config set-credentials jenkins-user --token=%KUBE_TOKEN%
                         kubectl config set-context jenkins-context --cluster=k8s-cluster --user=jenkins-user
                         kubectl config use-context jenkins-context
